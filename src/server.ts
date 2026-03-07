@@ -1,4 +1,5 @@
 import express from "express";
+import kixieWebhook from "./routes/kixieWebhook";
 
 const app = express();
 
@@ -11,6 +12,10 @@ app.get("/", (req, res) => {
 app.get("/health", (req, res) => {
   res.json({ status: "ok" });
 });
+
+/* Kixie Webhook Route */
+
+app.use("/kixie", kixieWebhook);
 
 const PORT = 3000;
 
