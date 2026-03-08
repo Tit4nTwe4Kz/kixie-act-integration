@@ -15,36 +15,29 @@ export async function searchActContact(phone: string) {
     const ACT_DATABASE = process.env.ACT_DATABASE;
 
     if (!ACT_API_URL || !ACT_USERNAME || !ACT_PASSWORD || !ACT_DATABASE) {
-      throw new Error("Act API environment variables missing");
+      throw new Error("Act environment variables missing");
     }
 
-    /*
-    STEP 1
-    Authenticate with Act API
-    */
-
+    // Get authentication token
     const authResponse = await axios.post(
-      `${ACT_API_URL}/act.web.api/api/token`,
+      `${ACT_API_URL}/api/token`,
       {
         username: ACT_USERNAME,
         password: ACT_PASSWORD,
         database: ACT_DATABASE
+      },
+      {
+        headers: {
+          "Content-Type": "application/json"
+        }
       }
     );
 
-    const token = authResponse.data.access_token;
+    const token = authResponse.data.token;
 
-    if (!token) {
-      throw new Error("Failed to retrieve Act API token");
-    }
-
-    /*
-    STEP 2
-    Search contact by phone
-    */
-
+    // Search contact by phone
     const response = await axios.get(
-      `${ACT_API_URL}/act.web.api/api/contacts`,
+      `${ACT_API_URL}/api/contacts`,
       {
         params: {
           phone: phone
