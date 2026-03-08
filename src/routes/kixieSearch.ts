@@ -22,7 +22,11 @@ async function handleSearch(req: any, res: any) {
       phone = phone.find((p) => p && p.length > 0);
     }
 
-    console.log("Kixie search request received for:", phone);
+    console.log("FULL SEARCH REQUEST:", JSON.stringify({
+  query: req.query,
+  body: req.body
+}, null, 2));
+console.log("Kixie search request received for:", phone);
 
     if (!phone) {
       return res.json({
