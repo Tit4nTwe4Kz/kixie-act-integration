@@ -5,50 +5,44 @@ const router = express.Router();
 
 /*
 Kixie Search Endpoint
-Used for contact lookup when a call is initiated
+Handles both GET and POST requests from Kixie
 */
 
-router.post("/search", async (req, res) => {
-
+router.all("/search", async (req, res) => {
   try {
 
-    const phone = req.body.number || req.body.phone || "";
+    const phone =
+      req.query.number ||
+      req.body.number ||
+      req.body.phone ||
+      "";
 
     console.log("Kixie search request received for:", phone);
 
     if (!phone) {
-      return res.json({
-        success: false,
-        message: "No phone number provided"
-      });
+      return res.json({ success: false });
     }
 
-    const contact = await searchActContact(phone);
+    const contact = await searchActContact(String(phone));
 
     if (!contact) {
-
-      return res.json({
-        success: true,
-        contact: null
-      });
-
+      return res.json({ success: true, contact: null });
     }
 
     return res.json({
       success: true,
-      contact: contact
+      contact
     });
 
   } catch (error) {
 
     console.error("Search error:", error);
 
-    res.status(500).json({
+    return res.status(500).json({
       success: false
     });
 
   }
-
 });
 
 export default router;
