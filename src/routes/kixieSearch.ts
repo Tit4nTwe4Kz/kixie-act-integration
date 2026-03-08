@@ -9,12 +9,13 @@ async function handleSearch(req: any, res: any) {
 
     let phone =
       req.query.number ||
-      req.query.customernumber ||
-      req.query.businessnumber ||
       req.body?.number ||
       req.body?.customernumber ||
       req.body?.businessnumber ||
-      req.body?.phone ||
+      req.body?.callDetails?.tonumber164 ||
+      req.body?.callDetails?.tonumber ||
+      req.body?.callDetails?.fromnumber164 ||
+      req.body?.callDetails?.fromnumber ||
       "";
 
     if (Array.isArray(phone)) {
@@ -32,16 +33,9 @@ async function handleSearch(req: any, res: any) {
 
     const contact = await searchActContact(phone);
 
-    if (!contact) {
-      return res.json({
-        success: true,
-        contact: null
-      });
-    }
-
     return res.json({
       success: true,
-      contact
+      contact: contact || null
     });
 
   } catch (error) {
