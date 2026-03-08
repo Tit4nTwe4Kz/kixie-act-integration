@@ -3,23 +3,20 @@ import { searchActContact } from "../services/actLookup";
 
 const router = express.Router();
 
-/*
-Kixie Search Endpoint
-Handles GET and POST search requests
-*/
-
 async function handleSearch(req: any, res: any) {
 
   try {
 
     let phone =
       req.query.number ||
+      req.query.customernumber ||
+      req.query.businessnumber ||
       req.body?.number ||
       req.body?.customernumber ||
+      req.body?.businessnumber ||
       req.body?.phone ||
       "";
 
-    // Fix duplicate parameters like ?number=&number=+123
     if (Array.isArray(phone)) {
       phone = phone.find((p) => p && p.length > 0);
     }
