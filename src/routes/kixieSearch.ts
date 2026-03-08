@@ -1,4 +1,5 @@
 import express from "express";
+import { searchActContact } from "../services/actLookup";
 
 const router = express.Router();
 
@@ -8,16 +9,34 @@ Used for contact lookup when a call is initiated
 */
 
 router.post("/search", async (req, res) => {
+
   try {
 
     const phone = req.body.number || req.body.phone || "";
 
     console.log("Kixie search request received for:", phone);
 
-    res.json({
+    if (!phone) {
+      return res.json({
+        success: false,
+        message: "No phone number provided"
+      });
+    }
+
+    const contact = await searchActContact(phone);
+
+    if (!contact) {
+
+      return res.json({
+        success: true,
+        contact: null
+      });
+
+    }
+
+    return res.json({
       success: true,
-      contact: null,
-      message: "Search endpoint active – Act lookup coming next"
+      contact: contact
     });
 
   } catch (error) {
@@ -29,6 +48,7 @@ router.post("/search", async (req, res) => {
     });
 
   }
+
 });
 
 export default router;
