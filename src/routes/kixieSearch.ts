@@ -4,29 +4,27 @@ import { searchActContact } from "../services/actLookup";
 const router = express.Router();
 
 async function handleSearch(req: any, res: any) {
-
   try {
+
+    console.log("FULL SEARCH REQUEST:", JSON.stringify({
+      query: req.query,
+      body: req.body
+    }, null, 2));
 
     let phone =
       req.query.number ||
+      req.query.customernumber ||
+      req.query.businessnumber ||
       req.body?.number ||
       req.body?.customernumber ||
       req.body?.businessnumber ||
-      req.body?.callDetails?.tonumber164 ||
-      req.body?.callDetails?.tonumber ||
-      req.body?.callDetails?.fromnumber164 ||
-      req.body?.callDetails?.fromnumber ||
       "";
 
     if (Array.isArray(phone)) {
       phone = phone.find((p) => p && p.length > 0);
     }
 
-    console.log("FULL SEARCH REQUEST:", JSON.stringify({
-  query: req.query,
-  body: req.body
-}, null, 2));
-console.log("Kixie search request received for:", phone);
+    console.log("Kixie search request received for:", phone);
 
     if (!phone) {
       return res.json({
@@ -51,7 +49,6 @@ console.log("Kixie search request received for:", phone);
     });
 
   }
-
 }
 
 router.get("/search", handleSearch);
