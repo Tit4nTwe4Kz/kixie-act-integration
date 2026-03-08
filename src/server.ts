@@ -14,8 +14,6 @@ app.get("/health", (req, res) => {
   res.json({ status: "ok" });
 });
 
-/* Kixie Routes */
-
 app.use("/kixie", kixieWebhook);
 app.use("/kixie", kixieSearch);
 
