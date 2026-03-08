@@ -8,22 +8,28 @@ Kixie Search Endpoint
 Handles both GET and POST requests from Kixie
 */
 
-router.all("/search", async (req, res) => {
+async function handleSearch(req: any, res: any) {
+
   try {
 
-    const phone =
+    let phone =
       req.query.number ||
-      req.body.number ||
-      req.body.phone ||
+      req.body?.number ||
+      req.body?.phone ||
       "";
+
+    // Fix duplicated query like ?number=&number=+123
+    if (Array.isArray(phone)) {
+      phone = phone.find((p) => p && p.length > 0);
+    }
 
     console.log("Kixie search request received for:", phone);
 
     if (!phone) {
-      return res.json({ success: false });
+      return res.json({ success: true, contact: null });
     }
 
-    const contact = await searchActContact(String(phone));
+    const contact = await searchActContact(phone);
 
     if (!contact) {
       return res.json({ success: true, contact: null });
@@ -43,6 +49,10 @@ router.all("/search", async (req, res) => {
     });
 
   }
-});
+
+}
+
+router.get("/search", handleSearch);
+router.post("/search", handleSearch);
 
 export default router;
