@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const ACT_API_BASE = "https://appus.act.com/act.web.api";
+const ACT_API_BASE = "https://apius.act.com/act.web.api";
 
 export async function searchActContact(phone: string) {
   try {
