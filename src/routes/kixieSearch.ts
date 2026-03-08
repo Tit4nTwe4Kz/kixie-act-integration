@@ -5,7 +5,7 @@ const router = express.Router();
 
 /*
 Kixie Search Endpoint
-Handles both GET and POST requests from Kixie
+Handles GET and POST search requests
 */
 
 async function handleSearch(req: any, res: any) {
@@ -15,10 +15,11 @@ async function handleSearch(req: any, res: any) {
     let phone =
       req.query.number ||
       req.body?.number ||
+      req.body?.customernumber ||
       req.body?.phone ||
       "";
 
-    // Fix duplicated query like ?number=&number=+123
+    // Fix duplicate parameters like ?number=&number=+123
     if (Array.isArray(phone)) {
       phone = phone.find((p) => p && p.length > 0);
     }
@@ -26,13 +27,19 @@ async function handleSearch(req: any, res: any) {
     console.log("Kixie search request received for:", phone);
 
     if (!phone) {
-      return res.json({ success: true, contact: null });
+      return res.json({
+        success: true,
+        contact: null
+      });
     }
 
     const contact = await searchActContact(phone);
 
     if (!contact) {
-      return res.json({ success: true, contact: null });
+      return res.json({
+        success: true,
+        contact: null
+      });
     }
 
     return res.json({
