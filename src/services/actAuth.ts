@@ -14,7 +14,7 @@ export async function getActToken(): Promise<string> {
   }
 
   const response = await axios.post(
-    `${ACT_API_BASE}/api/token`,
+    `${ACT_API_BASE}/api/authorize`,
     {
       username: process.env.ACT_USERNAME,
       password: process.env.ACT_PASSWORD,
