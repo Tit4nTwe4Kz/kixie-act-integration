@@ -1,14 +1,15 @@
 import axios from "axios";
 
-const ACT_API_BASE = process.env.ACT_API_URL as string;
+const ACT_API_BASE = process.env.ACT_API_URL || "https://apius.act.com/act.web.api";
 
 let cachedToken: string | null = null;
-let tokenExpires = 0;
+let tokenExpires: number = 0;
 
 export async function getActToken(): Promise<string> {
 
   const now = Date.now();
 
+  // reuse cached token if still valid
   if (cachedToken && now < tokenExpires) {
     return cachedToken;
   }
@@ -29,6 +30,7 @@ export async function getActToken(): Promise<string> {
   );
 
   const token = response.data.access_token;
+
   const expiresIn = response.data.expires_in || 3600;
 
   cachedToken = token;
