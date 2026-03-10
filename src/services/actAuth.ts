@@ -3,13 +3,12 @@ import axios from "axios";
 const ACT_API_BASE = process.env.ACT_API_URL || "https://apius.act.com/act.web.api";
 
 let cachedToken: string | null = null;
-let tokenExpires: number = 0;
+let tokenExpires = 0;
 
 export async function getActToken(): Promise<string> {
 
   const now = Date.now();
 
-  // reuse cached token if still valid
   if (cachedToken && now < tokenExpires) {
     return cachedToken;
   }
@@ -17,7 +16,6 @@ export async function getActToken(): Promise<string> {
   const response = await axios.post(
     `${ACT_API_BASE}/api/authorize`,
     new URLSearchParams({
-      grant_type: "password",
       username: process.env.ACT_USERNAME || "",
       password: process.env.ACT_PASSWORD || "",
       database: process.env.ACT_DATABASE || ""
