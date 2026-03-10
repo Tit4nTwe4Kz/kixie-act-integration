@@ -14,25 +14,24 @@ export async function getActToken(): Promise<string> {
   }
 
   const response = await axios.post(
-    `${ACT_API_BASE}/api/authorize`,
-    new URLSearchParams({
-      username: process.env.ACT_USERNAME || "",
-      password: process.env.ACT_PASSWORD || "",
-      database: process.env.ACT_DATABASE || ""
-    }),
+    `${ACT_API_BASE}/api/token`,
+    {
+      username: process.env.ACT_USERNAME,
+      password: process.env.ACT_PASSWORD,
+      database: process.env.ACT_DATABASE
+    },
     {
       headers: {
-        "Content-Type": "application/x-www-form-urlencoded"
+        "Content-Type": "application/json"
       }
     }
   );
 
   const token = response.data.access_token;
-
-  const expiresIn = response.data.expires_in || 3600;
+  const expires = response.data.expires_in || 3600;
 
   cachedToken = token;
-  tokenExpires = now + (expiresIn - 60) * 1000;
+  tokenExpires = now + (expires - 60) * 1000;
 
   return token;
 }
