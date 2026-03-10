@@ -15,7 +15,7 @@ export async function getActToken(): Promise<string> {
   }
 
   const response = await axios.post(
-    `${ACT_API_BASE}/api/token`,
+    `${ACT_API_BASE}/api/authorize`,
     new URLSearchParams({
       grant_type: "password",
       username: process.env.ACT_USERNAME || "",
