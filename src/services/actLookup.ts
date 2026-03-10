@@ -17,10 +17,10 @@ export async function searchActContact(phone: string) {
 
     const contactSearch = await axios.get(
       `${ACT_API_BASE}/api/contacts?$filter=
-      contains(BUSINESS_PHONE,'${normalized}') or
-      contains(MOBILE_PHONE,'${normalized}') or
-      contains(DIRECT_LINE_PHONE,'${normalized}') or
-      contains(HOME_PHONE,'${normalized}')`,
+      contains(Phone,'${normalized}') or
+      contains(MobilePhone,'${normalized}') or
+      contains(DirectLinePhone,'${normalized}') or
+      contains(HomePhone,'${normalized}')`,
       { headers }
     );
 
@@ -60,8 +60,8 @@ export async function searchActContact(phone: string) {
 
     const companySearch = await axios.get(
       `${ACT_API_BASE}/api/companies?$filter=
-      contains(PHONE,'${normalized}') or
-      contains(TOLL_FREE_PHONE,'${normalized}')`,
+      contains(Phone,'${normalized}') or
+      contains(TollFreePhone,'${normalized}')`,
       { headers }
     );
 
